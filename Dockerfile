@@ -36,4 +36,4 @@ WORKDIR /app
 COPY . .
 
 # Run bot
-CMD ["python", "bot.py"]
+CMD ["python", "main.py"]
