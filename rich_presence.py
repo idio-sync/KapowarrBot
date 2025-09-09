@@ -1,6 +1,5 @@
 import asyncio
 import discord
-import traceback
 from datetime import datetime
 from typing import Optional, Dict, Any
 
@@ -30,60 +29,48 @@ class KapowarrRichPresence:
             True if successful, False otherwise
         """
         try:
-            self.log("DEBUG: Starting presence update...")
-            
-            # Debug: Check if client is ready
+            # Check if client is ready
             if not self.client.is_ready():
-                self.log("DEBUG: Client is not ready yet")
                 return False
-            self.log("DEBUG: Client is ready")
             
-            self.log("DEBUG: Getting library stats from Kapowarr...")
+            # Small delay to ensure client is fully ready
+            await asyncio.sleep(0.1)
+            
             stats = await self.kapowarr.get_library_stats()
-            self.log(f"DEBUG: Received stats: {stats}")
             
             if not stats:
-                self.log("DEBUG: No stats available, skipping presence update")
+                self.log("No stats available, skipping presence update")
                 return False
             
             # Get the file count from stats
             file_count = stats.get('files', 0)
-            self.log(f"DEBUG: File count extracted: {file_count}")
             
-            # Debug: Always update for testing (remove the count check temporarily)
-            self.log(f"DEBUG: Last count was {self.last_file_count}, new count is {file_count}")
-            
+            # Always update (removes the conditional that was causing issues)
             self.last_file_count = file_count
             self.last_update = datetime.now()
             
-            self.log("DEBUG: Creating Discord activity...")
-            # Create the activity - use Playing librarian
+            # Create the activity
             activity = discord.Activity(
                 type=discord.ActivityType.playing,
                 name=f"librarian with {file_count:,} comics"
             )
-            self.log(f"DEBUG: Created activity: type={activity.type}, name='{activity.name}'")
             
-            # Debug: Check client user
-            self.log(f"DEBUG: Client user: {self.client.user}")
-            self.log(f"DEBUG: Client guilds: {len(self.client.guilds)} guilds")
+            # Small delay before API call
+            await asyncio.sleep(0.1)
             
-            self.log("DEBUG: Calling change_presence...")
             # Update the client's presence
             await self.client.change_presence(activity=activity)
-            self.log("DEBUG: change_presence call completed successfully")
             
-            # Debug: Check current activity after setting
-            if self.client.user:
-                current_activity = getattr(self.client.user, 'activity', None)
-                self.log(f"DEBUG: Current bot activity after update: {current_activity}")
+            # Small delay after API call
+            await asyncio.sleep(0.1)
             
             self.log(f"Updated presence: Playing librarian with {file_count:,} comics")
             return True
             
         except Exception as e:
-            self.log(f"ERROR: Exception in update_presence: {type(e).__name__}: {e}")
-            self.log(f"DEBUG: Full traceback: {traceback.format_exc()}")
+            self.log(f"Error updating presence: {e}")
+            # Small delay on error before retrying
+            await asyncio.sleep(1)
             return False
     
     async def start_presence_loop(self, update_interval: int = 3600) -> None:
@@ -94,31 +81,31 @@ class KapowarrRichPresence:
             update_interval: How often to update presence in seconds (default: 1 hour)
         """
         if self.is_running:
-            self.log("DEBUG: Presence loop is already running")
+            self.log("Presence loop is already running")
             return
             
         self.is_running = True
-        self.log(f"DEBUG: Starting rich presence loop (updates every {update_interval}s)")
+        self.log(f"Starting rich presence loop (updates every {update_interval}s)")
+        
+        # Initial delay to let bot fully initialize
+        await asyncio.sleep(2)
         
         while self.is_running:
             try:
-                self.log("DEBUG: Presence loop iteration starting...")
                 await self.update_presence()
-                self.log(f"DEBUG: Sleeping for {update_interval} seconds...")
                 await asyncio.sleep(update_interval)
                 
             except asyncio.CancelledError:
-                self.log("DEBUG: Presence loop cancelled")
+                self.log("Presence loop cancelled")
                 break
             except Exception as e:
-                self.log(f"ERROR: Error in presence loop: {e}")
-                self.log(f"DEBUG: Presence loop traceback: {traceback.format_exc()}")
-                await asyncio.sleep(10)  # Short delay on error
+                self.log(f"Error in presence loop: {e}")
+                await asyncio.sleep(10)  # Longer delay on error
     
     def stop_presence_loop(self) -> None:
         """Stop the rich presence update loop"""
         self.is_running = False
-        self.log("DEBUG: Stopping rich presence loop")
+        self.log("Stopping rich presence loop")
     
     async def set_custom_presence(self, text: str, activity_type: str = "playing") -> None:
         """
@@ -126,48 +113,44 @@ class KapowarrRichPresence:
         
         Args:
             text: Custom text to display
-            activity_type: Type of activity ("playing", "watching", "listening", "custom")
+            activity_type: Type of activity ("playing", "watching", "listening")
         """
         try:
-            self.log(f"DEBUG: Setting custom presence: {activity_type} {text}")
+            # Small delay before API call
+            await asyncio.sleep(0.1)
             
-            if activity_type.lower() == "custom":
-                # For custom activities, use state field for bots
-                activity = discord.Activity(
-                    type=discord.ActivityType.custom,
-                    state=text
-                )
-            else:
-                # Map string to Discord activity type for non-custom activities
-                activity_types = {
-                    "playing": discord.ActivityType.playing,
-                    "watching": discord.ActivityType.watching,
-                    "listening": discord.ActivityType.listening,
-                    "competing": discord.ActivityType.competing
-                }
-                
-                activity_type_enum = activity_types.get(activity_type.lower(), discord.ActivityType.playing)
-                
-                activity = discord.Activity(
-                    type=activity_type_enum,
-                    name=text
-                )
+            activity_types = {
+                "playing": discord.ActivityType.playing,
+                "watching": discord.ActivityType.watching,
+                "listening": discord.ActivityType.listening,
+                "competing": discord.ActivityType.competing
+            }
+            
+            activity_type_enum = activity_types.get(activity_type.lower(), discord.ActivityType.playing)
+            
+            activity = discord.Activity(
+                type=activity_type_enum,
+                name=text
+            )
             
             await self.client.change_presence(activity=activity)
-            self.log(f"DEBUG: Set custom presence successfully: {text}")
+            
+            # Small delay after API call
+            await asyncio.sleep(0.1)
+            
+            self.log(f"Set custom presence: {text}")
         except Exception as e:
-            self.log(f"ERROR: Error setting custom presence: {e}")
-            self.log(f"DEBUG: Custom presence traceback: {traceback.format_exc()}")
+            self.log(f"Error setting custom presence: {e}")
     
     async def clear_presence(self) -> None:
         """Clear the client's presence"""
         try:
-            self.log("DEBUG: Clearing client presence...")
+            await asyncio.sleep(0.1)
             await self.client.change_presence(activity=None)
-            self.log("DEBUG: Cleared client presence successfully")
+            await asyncio.sleep(0.1)
+            self.log("Cleared client presence")
         except Exception as e:
-            self.log(f"ERROR: Error clearing presence: {e}")
-            self.log(f"DEBUG: Clear presence traceback: {traceback.format_exc()}")
+            self.log(f"Error clearing presence: {e}")
 
 
 # Convenience function for easy integration
@@ -184,11 +167,9 @@ async def setup_rich_presence(client: discord.Client, kapowarr_client, log_func,
     Returns:
         KapowarrRichPresence instance
     """
-    log_func("DEBUG: Setting up rich presence...")
     presence = KapowarrRichPresence(client, kapowarr_client, log_func)
     
     if auto_start:
-        log_func("DEBUG: Auto-starting presence loop...")
         # Start the presence loop as a background task
         asyncio.create_task(presence.start_presence_loop())
     
