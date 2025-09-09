@@ -13,12 +13,12 @@ Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr) and 
 
 # Screenshots
 
-<img width="500" height="481" alt="image" src="https://github.com/user-attachments/assets/65f53747-8ba4-4332-933e-479b86dec879" />
+<img width="500" height="481" alt="image" src="https://github.com/user-attachments/assets/65f53747-8ba4-4332-933e-479b86dec879" /><br/>
 
-<img width="500" height="819" alt="image" src="https://github.com/user-attachments/assets/0bc6e0be-cd89-4407-adb8-3c3c985b3d40" />
+<img width="500" height="819" alt="image" src="https://github.com/user-attachments/assets/0bc6e0be-cd89-4407-adb8-3c3c985b3d40" /><br/>
 
-<img width="500" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" />
-\
+<img width="500" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" /><br/>
+
 <img width="302" height="69" alt="image" src="https://github.com/user-attachments/assets/3353ed46-2497-488f-8c6a-21d59e00bb58" />
 
 # Usage
