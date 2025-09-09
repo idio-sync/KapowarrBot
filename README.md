@@ -1,4 +1,4 @@
-Discord bot to interface with Kapowarr. Original code by stan42069.
+Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr). Original code by stan42069.
 
 Features:
 - Automatically checks every 24 hours for new comics that matches your set publisher(s) and will add/search them on Kapowarr (Currently set to Marvel, DC, and Dark Horse Comics)
@@ -10,6 +10,7 @@ Features:
 - Queue notifications for downloads, imports, etc.
 - Automatic and manual download supported if comic doesn't match
 
+Screenshots:
 <img width="704" height="481" alt="image" src="https://github.com/user-attachments/assets/65f53747-8ba4-4332-933e-479b86dec879" />
 
 <img width="744" height="819" alt="image" src="https://github.com/user-attachments/assets/0bc6e0be-cd89-4407-adb8-3c3c985b3d40" />
