@@ -51,7 +51,7 @@ class KapowarrRichPresence:
                 
                 # Update the client's presence
                 await self.client.change_presence(activity=activity)
-                self.log(f"Updated presence: Reading {file_count:,} comics")
+                self.log(f"Updated presence: Playing librarian with {file_count:,} comics")
                 return True
             
         except Exception as e:
@@ -60,12 +60,12 @@ class KapowarrRichPresence:
         
         return True
     
-    async def start_presence_loop(self, update_interval: int = 43200) -> None:
+    async def start_presence_loop(self, update_interval: int = 300) -> None:
         """
         Start the rich presence update loop
         
         Args:
-            update_interval: How often to update presence in seconds (default: 12 hours)
+            update_interval: How often to update presence in seconds (default: 5 minutes)
         """
         if self.is_running:
             self.log("Presence loop is already running")
