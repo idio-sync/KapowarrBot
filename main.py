@@ -7,6 +7,7 @@ from kapowarr import KapowarrClient
 from comic_monitor import ComicMonitor
 from comic_ui import ComicDetailView
 from comic_library_ui import ComicLibraryView
+from rich_presence import setup_rich_presence
 
 import config
 
@@ -14,6 +15,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
+rich_presence = None
 
 kapowarr = KapowarrClient(
     url=config.KAPOWARR_URL,
@@ -164,6 +166,12 @@ async def on_ready():
         log("🔥 Comic download queue monitoring enabled")
     else:
         log("🔥 Comic download queue monitoring disabled (Kapowarr not connected)")
+
+    if kapowarr_connected:
+        rich_presence = await setup_rich_presence(client, kapowarr, log, auto_start=True)
+        log("📊 Rich presence started - showing comic count")
+    else:
+        log("📊 Rich presence disabled (Kapowarr not connected)")
     
     log("Bot ready!")
 
