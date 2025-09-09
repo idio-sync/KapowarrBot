@@ -1,4 +1,4 @@
-Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr). Original code by stan42069.
+Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr) and manage your comic book collection. Original code by stan42069.
 
 Features:
 - Automatically checks every 24 hours for new comics that matches your set publisher(s) and will add/search them on Kapowarr (Currently set to Marvel, DC, and Dark Horse Comics)
