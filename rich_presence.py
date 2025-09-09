@@ -87,12 +87,12 @@ class KapowarrRichPresence:
             self.log(f"DEBUG: Full traceback: {traceback.format_exc()}")
             return False
     
-    async def start_presence_loop(self, update_interval: int = 43200) -> None:
+    async def start_presence_loop(self, update_interval: int = 3600) -> None:
         """
         Start the rich presence update loop
         
         Args:
-            update_interval: How often to update presence in seconds (default: 12 hours)
+            update_interval: How often to update presence in seconds (default: 1 hour)
         """
         if self.is_running:
             self.log("DEBUG: Presence loop is already running")
