@@ -1,26 +1,44 @@
+import os
+
+def get_env_bool(key: str, default: bool = False) -> bool:
+    """Convert environment variable to boolean."""
+    value = os.getenv(key, str(default)).lower()
+    return value in ('true', '1', 'yes', 'on')
+
+def get_env_int(key: str, default: int = 0) -> int:
+    """Convert environment variable to integer."""
+    try:
+        return int(os.getenv(key, str(default)))
+    except ValueError:
+        return default
+
+def get_env_str(key: str, default: str = "") -> str:
+    """Get environment variable as string."""
+    return os.getenv(key, default)
+
 # Discord Bot Configuration
-TOKEN = ""
-ADMIN_ROLE_ID =   # Your admin role ID
+TOKEN = get_env_str("DISCORD_TOKEN")
+ADMIN_ROLE_ID = get_env_int("ADMIN_ROLE_ID")
 
 # Kapowarr Configuration
-KAPOWARR_URL = ""  # Your Kapowarr URL
-KAPOWARR_API_KEY = ""
+KAPOWARR_URL = get_env_str("KAPOWARR_URL")
+KAPOWARR_API_KEY = get_env_str("KAPOWARR_API_KEY")
 
 # ComicVine Configuration
-COMICVINE_API_KEY = ""  # Get from https://comicvine.gamespot.com/api/
+COMICVINE_API_KEY = get_env_str("COMICVINE_API_KEY")
 
 # Comic Monitor Configuration
-COMIC_CHECK_ENABLED = True  # Enable/disable automatic comic checking
-COMIC_CHECK_INTERVAL_HOURS = 24  # How often to check for new comics (in hours)
-COMIC_CHECK_DAYS_BACK = 7  # How many days back to check for new releases
-COMIC_AUTO_SEARCH = True  # Automatically search for downloads after adding comics
+COMIC_CHECK_ENABLED = get_env_bool("COMIC_CHECK_ENABLED", True)
+COMIC_CHECK_INTERVAL_HOURS = get_env_int("COMIC_CHECK_INTERVAL_HOURS", 24)
+COMIC_CHECK_DAYS_BACK = get_env_int("COMIC_CHECK_DAYS_BACK", 7)
+COMIC_AUTO_SEARCH = get_env_bool("COMIC_AUTO_SEARCH", True)
 
 # Comic Download Notifications
-COMIC_NOTIFICATIONS_ENABLED = True  # Enable/disable download notifications
-COMIC_NOTIFICATIONS_CHANNEL_ID =   # Discord channel ID for notifications
-COMIC_QUEUE_CHECK_INTERVAL = 60  # How often to check download queue (in seconds)
+COMIC_NOTIFICATIONS_ENABLED = get_env_bool("COMIC_NOTIFICATIONS_ENABLED", True)
+COMIC_NOTIFICATIONS_CHANNEL_ID = get_env_int("COMIC_NOTIFICATIONS_CHANNEL_ID")
+COMIC_QUEUE_CHECK_INTERVAL = get_env_int("COMIC_QUEUE_CHECK_INTERVAL", 60)
 
 # Connection settings
-MAX_RETRY_ATTEMPTS = 3
-RETRY_DELAY = 5
-RECONNECT_INTERVAL = 60  # Check connection every 60 seconds
+MAX_RETRY_ATTEMPTS = get_env_int("MAX_RETRY_ATTEMPTS", 3)
+RETRY_DELAY = get_env_int("RETRY_DELAY", 5)
+RECONNECT_INTERVAL = get_env_int("RECONNECT_INTERVAL", 60)
