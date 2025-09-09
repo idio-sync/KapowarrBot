@@ -65,7 +65,7 @@ class KapowarrRichPresence:
         Start the rich presence update loop
         
         Args:
-            update_interval: How often to update presence in seconds (default: 5 minutes)
+            update_interval: How often to update presence in seconds (default: 12 hours)
         """
         if self.is_running:
             self.log("Presence loop is already running")
