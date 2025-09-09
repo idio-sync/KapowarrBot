@@ -60,7 +60,7 @@ class KapowarrRichPresence:
         
         return True
     
-    async def start_presence_loop(self, update_interval: int = 300) -> None:
+    async def start_presence_loop(self, update_interval: int = 43200) -> None:
         """
         Start the rich presence update loop
         
