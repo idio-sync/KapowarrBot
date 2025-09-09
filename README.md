@@ -25,7 +25,7 @@ docker pull idiosync000/kapowarrbot:latest
 ```
 Then set the env veriables listed below.
 
-Alternatively, run main.py with an .env file populated as shown below. 
+Alternatively, run main.py with an .env file populated as shown below present in the same directory. 
 
 # Enviornment Variable Configuration
 ```
