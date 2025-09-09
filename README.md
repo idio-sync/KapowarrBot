@@ -11,8 +11,9 @@ Features:
 - Automatic and manual download supported if comic doesn't match
 
 Screenshots:
-<img width="704" height="481" alt="image" src="https://github.com/user-attachments/assets/65f53747-8ba4-4332-933e-479b86dec879" />
 
-<img width="744" height="819" alt="image" src="https://github.com/user-attachments/assets/0bc6e0be-cd89-4407-adb8-3c3c985b3d40" />
+<img width="500" height="481" alt="image" src="https://github.com/user-attachments/assets/65f53747-8ba4-4332-933e-479b86dec879" />
 
-<img width="654" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" />
+<img width="500" height="819" alt="image" src="https://github.com/user-attachments/assets/0bc6e0be-cd89-4407-adb8-3c3c985b3d40" />
+
+<img width="500" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" />
