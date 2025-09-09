@@ -18,7 +18,7 @@ Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr) and 
 
 <img width="500" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" />
 
-# .env Variable Configuration:
+# Enviornment Variable Configuration:
 ```
 DISCORD_TOKEN = "Your Bot Token"
 ADMIN_ROLE_ID = "Your Admin Role ID"
