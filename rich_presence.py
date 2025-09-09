@@ -1,75 +1,26 @@
-"""
-Discord Rich Presence module for Kapowarr comic library stats
-Shows "Reading X comics" where X is the total file count from Kapowarr
-"""
-
 import asyncio
-import aiohttp
 import discord
 from datetime import datetime
 from typing import Optional, Dict, Any
 
-# Import configuration from your config file
-from config import (
-    KAPOWARR_URL,
-    KAPOWARR_API_KEY,
-    MAX_RETRY_ATTEMPTS,
-    RETRY_DELAY,
-    RECONNECT_INTERVAL
-)
-
 
 class KapowarrRichPresence:
-    def __init__(self, bot: discord.Client):
+    def __init__(self, client: discord.Client, kapowarr_client, log_func):
         """
         Initialize the Rich Presence handler
         
         Args:
-            bot: The Discord bot client instance
+            client: The Discord client instance
+            kapowarr_client: Your existing KapowarrClient instance
+            log_func: Your existing log function
         """
-        self.bot = bot
-        self.url = KAPOWARR_URL.rstrip('/')  # Remove trailing slash if present
-        self.api_key = KAPOWARR_API_KEY
+        self.client = client
+        self.kapowarr = kapowarr_client
+        self.log = log_func
         self.last_file_count = 0
         self.last_update = None
         self.is_running = False
         
-    async def get_library_stats(self) -> Dict[str, Any]:
-        """
-        Fetch library statistics from Kapowarr API
-        
-        Returns:
-            Dict containing library stats or empty dict if failed
-        """
-        try:
-            params = {
-                'api_key': self.api_key
-            }
-            
-            stats_url = f"{self.url}/api/volumes/stats"
-            
-            connector = aiohttp.TCPConnector(
-                limit=10, 
-                limit_per_host=5, 
-                keepalive_timeout=30
-            )
-            
-            async with aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=15),
-                connector=connector
-            ) as session:
-                async with session.get(stats_url, params=params) as response:
-                    if response.status == 200:
-                        stats_data = await response.json()
-                        return stats_data.get('result', {})
-                    else:
-                        self.log(f"Failed to get library stats: HTTP {response.status}")
-                        return {}
-                        
-        except Exception as e:
-            self.log(f"Error getting library stats: {e}")
-            return {}
-    
     async def update_presence(self) -> bool:
         """
         Update Discord rich presence with current comic count
@@ -78,7 +29,7 @@ class KapowarrRichPresence:
             True if successful, False otherwise
         """
         try:
-            stats = await self.get_library_stats()
+            stats = await self.kapowarr.get_library_stats()
             
             if not stats:
                 self.log("No stats available, skipping presence update")
@@ -92,14 +43,14 @@ class KapowarrRichPresence:
                 self.last_file_count = file_count
                 self.last_update = datetime.now()
                 
-                # Create the activity
+                # Create the activity - use custom activity with state field for bots
                 activity = discord.Activity(
                     type=discord.ActivityType.custom,
-                    name=f"Reading {file_count:,} comics"
+                    state=f"Reading {file_count:,} comics"
                 )
                 
-                # Update the bot's presence
-                await self.bot.change_presence(activity=activity)
+                # Update the client's presence
+                await self.client.change_presence(activity=activity)
                 self.log(f"Updated presence: Reading {file_count:,} comics")
                 return True
             
@@ -140,18 +91,37 @@ class KapowarrRichPresence:
         self.is_running = False
         self.log("Stopping rich presence loop")
     
-    async def set_custom_presence(self, text: str) -> None:
+    async def set_custom_presence(self, text: str, activity_type: str = "custom") -> None:
         """
         Set a custom presence text
         
         Args:
             text: Custom text to display
+            activity_type: Type of activity ("playing", "watching", "listening", "custom")
         """
         try:
-            activity = discord.Activity(
-                type=discord.ActivityType.custom,
-                name=text
-            )
+            if activity_type.lower() == "custom":
+                # For custom activities, use state field for bots
+                activity = discord.Activity(
+                    type=discord.ActivityType.custom,
+                    state=text
+                )
+            else:
+                # Map string to Discord activity type for non-custom activities
+                activity_types = {
+                    "playing": discord.ActivityType.playing,
+                    "watching": discord.ActivityType.watching,
+                    "listening": discord.ActivityType.listening,
+                    "competing": discord.ActivityType.competing
+                }
+                
+                activity_type_enum = activity_types.get(activity_type.lower(), discord.ActivityType.watching)
+                
+                activity = discord.Activity(
+                    type=activity_type_enum,
+                    name=text
+                )
+            
             await self.client.change_presence(activity=activity)
             self.log(f"Set custom presence: {text}")
         except Exception as e:
