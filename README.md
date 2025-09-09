@@ -19,29 +19,20 @@ Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr) and 
 <img width="500" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" />
 
 # .env Variable Configuration:
-Discord Bot Configuration
+```
 DISCORD_TOKEN = "Your Bot Token"
 ADMIN_ROLE_ID = "Your Admin Role ID"
-
-Kapowarr Configuration
 KAPOWARR_URL = "Your Kapowarr URL"
 KAPOWARR_API_KEY = " Your Kapowarr API Key"
-
-ComicVine Configuration
 COMICVINE_API_KEY = "Your Comicvine API Key""  # Get from https://comicvine.gamespot.com/api/
-
-Comic Monitor Configuration
 COMIC_CHECK_ENABLED = True  # Enable/disable automatic comic checking
 COMIC_CHECK_INTERVAL_HOURS = 24  # How often to check for new comics (in hours)
 COMIC_CHECK_DAYS_BACK = 7  # How many days back to check for new releases
 COMIC_AUTO_SEARCH = True  # Automatically search for downloads after adding comics
-
-Comic Download Notifications
 COMIC_NOTIFICATIONS_ENABLED = True  # Enable/disable download notifications
 COMIC_NOTIFICATIONS_CHANNEL_ID =   # Discord channel ID for notifications
 COMIC_QUEUE_CHECK_INTERVAL = 60  # How often to check download queue (in seconds)
-
-Connection settings
 MAX_RETRY_ATTEMPTS = 3
 RETRY_DELAY = 5
 RECONNECT_INTERVAL = 60  # Check connection every 60 seconds
+```
