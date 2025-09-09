@@ -18,6 +18,15 @@ Discord bot to interface with [Kapowarr](https://github.com/Casvt/Kapowarr) and 
 
 <img width="500" height="796" alt="image" src="https://github.com/user-attachments/assets/60178b0f-e638-47cd-9185-2f31359ae807" />
 
+# Usage
+Docker:
+```
+docker pull idiosync000/kapowarrbot:latest
+```
+Then set the env veriables listed below.
+
+Alternatively, run main.py with an .env file populated as shown below. 
+
 # Enviornment Variable Configuration:
 ```
 DISCORD_TOKEN = "Your Bot Token"
